@@ -48,8 +48,8 @@ const addCalculoImc = (request, response) => {
     response.status(200).json(resultado)
 }
 
-const getResultados = (request, reponse) => {
-    reponse.status(200).json(calculos)
+const getResultados = (request, response) => {
+    response.status(200).json(calculos)
 }
 
 const removeCalculoImc = (request, response) => {
@@ -65,11 +65,11 @@ const removeCalculoImc = (request, response) => {
 
 }
 
-app.post("/addCalculoImc", calculaImc)
+app.post("/addCalculoImc", addCalculoImc)
 
-app.get("/getResultados", listarCalculos)
+app.get("/getResultados", getResultados)
 
-app.delete("/removeCalculoImc/:indice", removerCalculo)
+app.delete("/removeCalculoImc/:indice", removeCalculoImc)
 
 app.listen(3002, () => {
     console.log('Servidor rodando na porta 3002')
