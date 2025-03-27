@@ -7,16 +7,9 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(cors())
 
-/* 
-    Um método que recebe um objeto JSON com o nome, altura e peso de
-uma pessoa, e retorna o valor do IMC e sua classificação juntamente
-os dados recebidos. Este método também deve armazenar em
-uma lista no servidor do serviço os cálculos já realizados.
-*/
-
 let calculos = [];
 
-const calculaImc = (request, response) => {
+const addCalculoImc = (request, response) => {
 
     const { nome, altura, peso } = request.body;
 
@@ -55,18 +48,28 @@ const calculaImc = (request, response) => {
     response.status(200).json(resultado)
 }
 
-/*
-Um método que retorna uma lista com todos os cálculos do IMC já
-realizados.
-*/
+const getResultados = (request, reponse) => {
+    reponse.status(200).json(calculos)
+}
 
-/*
-Um método que recebe um índice de um cálculo já realizado e o
-remove da lista. 
-*/
+const removeCalculoImc = (request, response) => {
+    const { indice } = request.params;
 
-app.route("/calculaImc")
-    .post(calculaImc)
+    if (indice < 0 || indice >= calculos.length) {
+        return response.status(400).json({ erro: "Índice inválido" });
+    }
+
+    calculos.splice(indice, 1);
+
+    return response.status(200).json({ mensagem: "Cálculo removido com sucesso!" });
+
+}
+
+app.post("/addCalculoImc", calculaImc)
+
+app.get("/getResultados", listarCalculos)
+
+app.delete("/removeCalculoImc/:indice", removerCalculo)
 
 app.listen(3002, () => {
     console.log('Servidor rodando na porta 3002')
